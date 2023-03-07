@@ -1,0 +1,206 @@
+<header>
+  <div>Angular Blog</div>
+  <div>
+    <ng-container *ngIf="hideContainer">
+      <button *ngIf="hide" (click)="signin()" class="btn-in">Sign In</button>
+      <button *ngIf="hide" (click)="signup()" class="btn-up">Sign Up</button>
+    </ng-container>
+
+    <button (click)="addpost()" class="addpost-btn" *ngIf="!hide">
+      Add Post
+    </button>
+    <button class="adminbtn" *ngIf="!hide" disabled>admin</button>
+    <button (click)="signout()" class="signout-btn" *ngIf="!hide">
+      Sign Out
+    </button>
+
+    <button (click)="addpost()" class="addpost-btn" *ngIf="hide1">
+      Add Post
+    </button>
+    <button class="adminbtn" *ngIf="hide1" disabled>{{ userMain }}</button>
+    <button (click)="signout()" class="signout-btn" *ngIf="hide1">
+      Sign Out
+    </button>
+  </div>
+</header>
+<main *ngFor="let blog of mainblogs">
+  <div class="container">
+    <div class="info">
+      <p class="bold">{{ blog.topic }}</p>
+      <br />
+      <p class="gray">Posted by:{{ blog.postedBy }}</p>
+      <br />
+      <p>{{ blog.message }}</p>
+    </div>
+    <div class="date">
+      {{ blog.date | date : "&#128339; HH:mm, dd.MM.YYYY" }}
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <ng-container *ngIf="blog.postedBy === userMain">
+        <button (click)="editer(blog)" class="edit-btn">Edit</button>
+        <button class="delete-btn" (click)="deleter(blog)">Delete</button>
+      </ng-container>
+
+      <ng-container *ngIf="blog.postedBy === 'admin'">
+        <button *ngIf="registadmin" (click)="editer(blog)" class="edit-btn">
+          Edit
+        </button>
+        <button *ngIf="registadmin" class="delete-btn" (click)="deleter(blog)">
+          Delete
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</main>
+
+<ng-container *ngIf="perem">
+  <div class="wrapper">
+    <div class="modal">
+      <div class="headmodal">
+        <div>Sign In</div>
+        <div>
+          <span style="cursor: pointer" (click)="closer()">&#10006;</span>
+        </div>
+      </div>
+      <hr />
+      <label for="i1"
+        ><p style="margin-left: 50px; margin-top: 30px">Email:</p></label
+      >
+      <input
+        type="text"
+        style="margin-left: 50px"
+        class="inpmodal"
+        id="i1"
+        [(ngModel)]="emailvalue"
+      />
+      <label for="i2"
+        ><p style="margin-left: 50px; margin-top: 30px">Password:</p></label
+      >
+      <input
+        type="password"
+        style="margin-left: 50px; margin-bottom: 30px"
+        class="inpmodal"
+        id="i2"
+        [(ngModel)]="passvalue"
+      />
+      <hr />
+      <div style="display: flex; justify-content: space-between; padding: 20px">
+        <div></div>
+        <div>
+          <button class="close" (click)="closer()">Close</button>
+          <button class="submit" (click)="submiter()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="peremadmin">
+  <div class="wrapper">
+    <div class="modal-admin">
+      <div class="headmodal">
+        <div>Add post</div>
+        <div>
+          <span style="cursor: pointer" (click)="closer()">&#10006;</span>
+        </div>
+      </div>
+      <hr />
+      <label for="i3" style="margin-left: 50px; margin-top: 30px">Title:</label>
+      <input
+        type="text"
+        style="margin-left: 50px"
+        class="inpmodal"
+        id="i3"
+        [(ngModel)]="admintitle"
+      />
+
+      <label for="i4"
+        ><p style="margin-left: 50px; margin-top: 30px">Text:</p></label
+      >
+      <textarea
+        id="i4"
+        cols="68"
+        rows="6"
+        style="margin-left: 50px; margin-bottom: 30px"
+        class="area"
+        [(ngModel)]="adminarea"
+      ></textarea>
+      <br />
+      <hr />
+      <div style="display: flex; justify-content: space-between; padding: 20px">
+        <div></div>
+        <div>
+          <button class="close" (click)="closer()">Close</button>
+          <button *ngIf="editStatus" (click)="editerPost()" class="submit">
+            Edit Post
+          </button>
+          <button *ngIf="!editStatus" class="submit" (click)="poster()">
+            Post
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="peremuser">
+  <div class="wrapper">
+    <div class="modal-user">
+      <div class="headmodal">
+        <div>Sign Up</div>
+        <div>
+          <span style="cursor: pointer" (click)="closer()">&#10006;</span>
+        </div>
+      </div>
+      <hr />
+      <br />
+      <label for="i5" style="margin-left: 50px; margin-top: 30px"
+        >Username:</label
+      >
+      <input
+        type="text"
+        style="margin-left: 50px"
+        class="inpmodal"
+        id="i5"
+        [(ngModel)]="username"
+      />
+      <br />
+      <br />
+      <label for="i6" style="margin-left: 50px; margin-top: 30px">Email:</label>
+      <input
+        type="email"
+        style="margin-left: 50px"
+        class="inpmodal"
+        id="i6"
+        [(ngModel)]="useremail"
+      />
+      <br />
+      <br />
+      <label for="i7" style="margin-left: 50px; margin-top: 30px"
+        >Password:</label
+      >
+      <input
+        type="password"
+        style="margin-left: 50px"
+        class="inpmodal"
+        id="i7"
+        [(ngModel)]="userpassword"
+      />
+      <br />
+      <br />
+      <hr />
+      <div style="display: flex; justify-content: space-between; padding: 20px">
+        <div></div>
+        <div>
+          <button class="close" (click)="closer()">Close</button>
+          <button class="submitForUser" (click)="submitForUser()">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
